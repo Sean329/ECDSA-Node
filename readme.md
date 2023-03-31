@@ -4,7 +4,7 @@ This project is an example of using a client and server to facilitate transfers 
 
 However, something that we would like to incoporate is Public Key Cryptography. By using Elliptic Curve Digital Signatures we can make it so the server only allows transfers that have been signed for by the person who owns the associated address.
 
-#### In the server/ dir, generate.js and sign.js were created to generate new keys/addresses and sign messages. The server will use retrive public keys from the signature and verify the authentication of the transaction before executing it. A nonce mechanism is also utilized to avoid repeated use of old signatures.
+#### In the server/ dir, generate.js and sign.js were created to generate new keys/addresses and sign messages. The web app will show you the message to sign and you will need to provide the signature. DO NOT provide the private key! The server will retrive the public key from the signature and verify the authentication of the transaction before executing it. A nonce mechanism is also utilized to avoid repeated use of old signatures.
 
 #### 3 addresses have been pre-assigned some money for you to play with! Run the generate.js and read the log to find those 3 addresses.
  
