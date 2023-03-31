@@ -1,9 +1,12 @@
 import { useState } from "react";
 import server from "./server";
 
-function Transfer({ address, setBalance }) {
+function Transfer({ address, setBalance, setNonce }) {
   const [sendAmount, setSendAmount] = useState("");
   const [recipient, setRecipient] = useState("");
+  const [signature, setSignature] = useState([]);
+  const [recoveryBit, setRecoveryBit] = useState(0);
+
 
   const setValue = (setter) => (evt) => setter(evt.target.value);
 
@@ -12,13 +15,16 @@ function Transfer({ address, setBalance }) {
 
     try {
       const {
-        data: { balance },
+        data: { balance, nonce },
       } = await server.post(`send`, {
         sender: address,
         amount: parseInt(sendAmount),
         recipient,
+        signature,
+        recoveryBit,
       });
       setBalance(balance);
+      setNonce(nonce);
     } catch (ex) {
       alert(ex.response.data.message);
     }
@@ -27,6 +33,28 @@ function Transfer({ address, setBalance }) {
   return (
     <form className="container transfer" onSubmit={transfer}>
       <h1>Send Transaction</h1>
+
+      <label>
+      <h2>Sign this message(I consent this transaction--) using YOUR WALLET ABOVE concatenated with its nonce. For example: I consent this transaction--0</h2>
+      </label>
+
+      <label>
+        Signature
+        <input
+          placeholder="The signature as Uint8Array"
+          value={signature}
+          onChange={setValue(setSignature)}
+        ></input>
+      </label>
+
+      <label>
+        Recovery Bit
+        <input
+          placeholder="The recoveryBit as int"
+          value={recoveryBit}
+          onChange={setValue(setRecoveryBit)}
+        ></input>
+      </label>
 
       <label>
         Send Amount
@@ -40,7 +68,7 @@ function Transfer({ address, setBalance }) {
       <label>
         Recipient
         <input
-          placeholder="Type an address, for example: 0x2"
+          placeholder="Type an address"
           value={recipient}
           onChange={setValue(setRecipient)}
         ></input>
